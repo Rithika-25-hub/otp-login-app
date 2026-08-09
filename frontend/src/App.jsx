@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Register from "./pages/Register";
-import Checkout from "./pages/Checkout";
+import Navbar from "./Components/Navbar";
+import Register from "./Pages/Register";
+import Checkout from "./Pages/Checkout";
 
 function App() {
   return (

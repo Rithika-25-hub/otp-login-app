@@ -1,5 +1,5 @@
 import { useState } from "react";
-import api from "../services/api";
+import api from "../Services/api";
 
 const Checkout = () => {
   const [user, setUser] = useState(null);
