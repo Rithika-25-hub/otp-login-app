@@ -33,6 +33,7 @@ const Checkout = () => {
           });
 
           if (response.data.registered) {
+            console.log("EMAIL FOUND")
             setShowModal(true);
           }
         } catch (error) {
@@ -57,6 +58,7 @@ const Checkout = () => {
       });
 
       setIsVerified(true);
+      console.log("isVerified =", true);
       setShowModal(false);
       setErrorMessage("");
     } catch (error) {
@@ -92,11 +94,11 @@ const Checkout = () => {
       setLoginCode("");
     } catch (error) {
       console.log("CHECKOUT ERROR:", error.response?.data);
-
+      alert(JSON.stringify(error.response?.data));
       setErrorMessage("Checkout failed");
     }
   };
-
+  console.log("isVerified =", isVerified);
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
