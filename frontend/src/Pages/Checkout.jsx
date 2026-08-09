@@ -37,40 +37,33 @@ const Checkout = () => {
             setShowModal(true);
           }
         } catch (error) {
-          console.log(error.response?.data);
+          console.log("CHECK EMAIL ERROR:", error.response?.data);
         }
       }
     }
   };
 
-  const handleVerifyCode = async () => {
-    try {
-      const response = await api.post("/verify-code/", {
-        email: formData.email,
-        login_code: loginCode,
-      });
+const handleVerifyCode = async () => {
+  try {
+    const response = await api.post("/verify-code/", {
+      email: formData.email,
+      login_code: loginCode,
+    });
 
-      console.log("Verify Response:", response.data);
+    console.log("Verify Response:", response.data);
 
-      setUser({
-        first_name: response.data.first_name,
-        last_name: response.data.last_name,
-      });
+    setIsVerified(true);
 
-      setIsVerified(true);
-      console.log("isVerified =", true);
-      setShowModal(false);
-      setErrorMessage("");
-    } catch (error) {
-      console.log("VERIFY ERROR:", error.response?.data);
+    console.log("isVerified set to true");
 
-      setErrorMessage(error.response?.data?.message || "Invalid Login Code");
-    }
-  };
+  } catch (error) {
+    console.log("VERIFY ERROR:", error.response?.data);
+  }
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    console.log(formData);
     try {
       const response = await api.post("/checkout/", {
         email: formData.email,
