@@ -136,6 +136,8 @@ const Checkout = () => {
   console.log("isVerified =", isVerified);
 
   return (
+    <div className="checkout-page">
+
     <div className="container mt-5">
       <h1 className="text-center mb-4">Checkout</h1>
 
@@ -254,6 +256,7 @@ const Checkout = () => {
         <div className="alert alert-success mt-3">{successMessage}</div>
       )}
     </div>
+      </div>
   );
 };
 

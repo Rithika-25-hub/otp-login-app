@@ -1,6 +1,6 @@
 import { useState } from "react";
 import api from "../Services/api";
-
+import './Register.css'
 const Register = () => {
   const [loginCode, setLoginCode] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -20,6 +20,11 @@ const Register = () => {
       ...prev,
       [name]: value,
     }));
+
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -33,11 +38,16 @@ const Register = () => {
 
     if (!formData.last_name.trim()) {
       validationErrors.last_name = "Last Name is required";
+    } else if (formData.last_name.trim().length < 2) {
+      validationErrors.last_name =
+        "Last Name must contain at least 2 characters";
     }
 
     if (!formData.email.trim()) {
       validationErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    } else if (
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+    ) {
       validationErrors.email = "Enter a valid email";
     }
 
@@ -55,89 +65,142 @@ const Register = () => {
 
       setLoginCode(response.data.login_code);
 
-      setSuccessMessage("Registration completed successfully");
+      setSuccessMessage(
+        "Registration completed successfully"
+      );
 
-      console.log(response.data);
+      setFormData({
+        first_name: "",
+        last_name: "",
+        email: "",
+      });
+
+      setErrors({});
+
     } catch (error) {
       console.log("Error:", error.response?.data);
 
-      setErrorMessage(
-        error.response?.data?.email?.[0] || "Registration failed",
-      );
+      const backendErrors = error.response?.data;
+
+      if (backendErrors?.first_name) {
+        setErrorMessage(backendErrors.first_name[0]);
+      } else if (backendErrors?.last_name) {
+        setErrorMessage(backendErrors.last_name[0]);
+      } else if (backendErrors?.email) {
+        setErrorMessage(backendErrors.email[0]);
+      } else {
+        setErrorMessage("Registration failed");
+      }
     }
   };
 
   return (
-    <div>
-      <h1 className="text-center mb-4">Register</h1>
+    <div className="register-page">
 
-      <form onSubmit={handleSubmit} className="card p-4 shadow">
-        <div className="mb-3">
-          <input
-            type="text"
-            name="first_name"
-            placeholder="First Name"
-            value={formData.first_name}
-            onChange={handleChange}
-            className="form-control"
-          />
-          {errors.first_name && (
-            <small className="text-danger">{errors.first_name}</small>
+    <div className="container mt-5">
+      <div className="row justify-content-center">
+        <div className="col-md-6">
+
+          <h1 className="text-center mb-4">
+            Register
+          </h1>
+
+          <form
+            onSubmit={handleSubmit}
+            className="card p-4 shadow"
+          >
+            <div className="mb-3">
+              <input
+                type="text"
+                name="first_name"
+                placeholder="First Name"
+                value={formData.first_name}
+                onChange={handleChange}
+                className="form-control"
+              />
+
+              {errors.first_name && (
+                <div className="text-danger mt-1">
+                  {errors.first_name}
+                </div>
+              )}
+            </div>
+
+            <div className="mb-3">
+              <input
+                type="text"
+                name="last_name"
+                placeholder="Last Name"
+                value={formData.last_name}
+                onChange={handleChange}
+                className="form-control"
+              />
+
+              {errors.last_name && (
+                <div className="text-danger mt-1">
+                  {errors.last_name}
+                </div>
+              )}
+            </div>
+
+            <div className="mb-3">
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={handleChange}
+                className="form-control"
+              />
+
+              {errors.email && (
+                <div className="text-danger mt-1">
+                  {errors.email}
+                </div>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              className="btn btn-primary w-100"
+            >
+              Register
+            </button>
+          </form>
+
+          {successMessage && (
+            <div className="alert alert-success mt-3">
+              {successMessage}
+            </div>
           )}
-        </div>
 
-        <div className="mb-3">
-          <input
-            type="text"
-            name="last_name"
-            placeholder="Last Name"
-            value={formData.last_name}
-            onChange={handleChange}
-            className="form-control"
-          />
-          {errors.last_name && (
-            <small className="text-danger">{errors.last_name}</small>
+          {loginCode && (
+            <div className="card mt-3 border-success">
+              <div className="card-body text-center">
+                <h5 className="text-success">
+                  Registration Successful
+                </h5>
+
+                <p>
+                  Save this login code for checkout:
+                </p>
+
+                <h3 className="fw-bold">
+                  {loginCode}
+                </h3>
+              </div>
+            </div>
           )}
-        </div>
 
-        <div className="mb-3">
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-            className="form-control"
-          />
-          {errors.email && (
-            <small className="text-danger">{errors.email}</small>
+          {errorMessage && (
+            <div className="alert alert-danger mt-3">
+              {errorMessage}
+            </div>
           )}
+
         </div>
-
-        <button type="submit" className="btn btn-primary w-100">
-          Register
-        </button>
-      </form>
-
-      {successMessage && (
-        <div className="alert alert-success mt-3">{successMessage}</div>
-      )}
-
-      {loginCode && (
-        <div className="card mt-3 border-success">
-          <div className="card-body text-center">
-            <h5 className="text-success">Registration Successful</h5>
-
-            <p>Save this login code for checkout:</p>
-
-            <h3 className="fw-bold">{loginCode}</h3>
-          </div>
-        </div>
-      )}
-
-      {errorMessage && (
-        <div className="alert alert-danger mt-3">{errorMessage}</div>
-      )}
+      </div>
+    </div>
     </div>
   );
 };

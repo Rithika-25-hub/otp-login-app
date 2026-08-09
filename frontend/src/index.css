@@ -1,0 +1,32 @@
+.card {
+  max-width: 450px;
+  margin: 0 auto;
+  border-radius: 12px;
+}
+
+.form-control {
+  max-width: 100%;
+  height: 45px;
+  border-radius: 8px;
+}
+
+textarea.form-control {
+  height: auto;
+  min-height: 100px;
+}
+
+.btn-primary,
+.btn-success,
+.btn-outline-danger {
+  border-radius: 8px;
+  height: 45px;
+}
+
+.alert {
+  max-width: 450px;
+  margin: 15px auto;
+}
+
+.card-body {
+  word-break: break-word;
+}

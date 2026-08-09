@@ -1,0 +1,35 @@
+.register-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.register-page .card {
+  width: 380px;
+  border-radius: 12px;
+}
+
+.register-page .form-control {
+  height: 42px;
+  border-radius: 8px;
+}
+
+.register-page .btn-primary {
+  height: 42px;
+  border-radius: 8px;
+}
+
+.register-page .alert {
+  width: 380px;
+  margin: 15px auto;
+}
+
+.register-page .border-success {
+  width: 380px;
+  margin: 15px auto;
+}
+
+.register-page .text-danger {
+  font-size: 14px;
+}
