@@ -33,11 +33,9 @@ const Checkout = () => {
             email: value,
           });
 
-          console.log("CHECK EMAIL RESPONSE:", response.data);
-
+          
           if (response.data.registered) {
-            console.log("EMAIL FOUND");
-            setShowModal(true);
+                       setShowModal(true);
           }
         } catch (error) {
           console.log("CHECK EMAIL ERROR:", error.response?.data);
@@ -48,17 +46,12 @@ const Checkout = () => {
 
   const handleVerifyCode = async () => {
     try {
-      console.log("Sending:", {
-        email: formData.email,
-        login_code: loginCode,
-      });
 
       const response = await api.post("/verify-code/", {
         email: formData.email,
         login_code: loginCode,
       });
 
-      console.log("Verify Response:", response.data);
 
       setUser({
         first_name: response.data.first_name,
@@ -66,9 +59,7 @@ const Checkout = () => {
       });
 
       setIsVerified(true);
-
-      console.log("AFTER VERIFY CLICK");
-      console.log("isVerified should now be true");
+      // console.log("isVerified should now be true");
 
       setShowModal(false);
       setErrorMessage("");
@@ -100,7 +91,6 @@ const Checkout = () => {
       return;
     }
 
-    console.log("Submitting:", formData);
 
     try {
       const response = await api.post("/checkout/", {
@@ -109,7 +99,6 @@ const Checkout = () => {
         shipping_address: formData.shipping_address,
       });
 
-      console.log("Checkout Success:", response.data);
 
       setSuccessMessage(response.data.message);
       setErrorMessage("");
@@ -127,13 +116,10 @@ const Checkout = () => {
     } catch (error) {
       console.log("CHECKOUT ERROR:", error.response?.data);
 
-      alert(JSON.stringify(error.response?.data));
-
       setErrorMessage("Checkout failed");
     }
   };
 
-  console.log("isVerified =", isVerified);
 
   return (
     <div className="checkout-page">

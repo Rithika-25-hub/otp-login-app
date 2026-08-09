@@ -78,7 +78,6 @@ const Register = () => {
       setErrors({});
 
     } catch (error) {
-      console.log("Error:", error.response?.data);
 
       const backendErrors = error.response?.data;
 
