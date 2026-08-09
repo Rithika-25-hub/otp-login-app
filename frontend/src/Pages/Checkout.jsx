@@ -8,6 +8,7 @@ const Checkout = () => {
   const [showModal, setShowModal] = useState(false);
   const [loginCode, setLoginCode] = useState("");
   const [isVerified, setIsVerified] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const [formData, setFormData] = useState({
     email: "",
@@ -74,14 +75,30 @@ const Checkout = () => {
     } catch (error) {
       console.log("VERIFY ERROR:", error.response?.data);
 
-      setErrorMessage(
-        error.response?.data?.message || "Invalid Login Code"
-      );
+      setErrorMessage(error.response?.data?.message || "Invalid Login Code");
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    let validationErrors = {};
+
+    if (!formData.phone.trim()) {
+      validationErrors.phone = "Phone Number is required";
+    } else if (!/^\d{10}$/.test(formData.phone)) {
+      validationErrors.phone = "Phone Number must contain exactly 10 digits";
+    }
+
+    if (!formData.shipping_address.trim()) {
+      validationErrors.shipping_address = "Shipping Address is required";
+    }
+
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length > 0) {
+      return;
+    }
 
     console.log("Submitting:", formData);
 
@@ -106,6 +123,7 @@ const Checkout = () => {
       setUser(null);
       setIsVerified(false);
       setLoginCode("");
+      setErrors({});
     } catch (error) {
       console.log("CHECKOUT ERROR:", error.response?.data);
 
@@ -154,6 +172,9 @@ const Checkout = () => {
                 className="form-control"
                 required
               />
+              {errors.phone && (
+                <small className="text-danger">{errors.phone}</small>
+              )}
             </div>
 
             <div className="mb-3">
@@ -166,6 +187,9 @@ const Checkout = () => {
                 rows="3"
                 required
               />
+              {errors.shipping_address && (
+                <small className="text-danger">{errors.shipping_address}</small>
+              )}
             </div>
 
             <button type="submit" className="btn btn-primary w-100">
@@ -202,9 +226,7 @@ const Checkout = () => {
             />
 
             {errorMessage && (
-              <div className="alert alert-danger mt-3">
-                {errorMessage}
-              </div>
+              <div className="alert alert-danger mt-3">{errorMessage}</div>
             )}
 
             <div className="d-grid gap-2 mt-3">
@@ -229,9 +251,7 @@ const Checkout = () => {
       )}
 
       {successMessage && (
-        <div className="alert alert-success mt-3">
-          {successMessage}
-        </div>
+        <div className="alert alert-success mt-3">{successMessage}</div>
       )}
     </div>
   );
